@@ -53,11 +53,11 @@ def lex(s):
 
 def parse(ts):
     # TODO: Implement this using the shunting yard algorithm!
-    return 'the tokens in a specific order'
+    return []
 
 def evaluate(ast):
     # TODO: How should we evaluate reverse Polish notation?
-    return 'value of the arithmetic expression'
+    return 27102022
 
 # The main program:
 user_input = input('Input: ')
