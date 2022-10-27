@@ -92,14 +92,14 @@ def parse(ts):
         elif is_operator(t):
             while not empty(ops) and \
                     not is_lparen(t) and \
-                    precedence(top(ops)) >= precedence(t):
+                     precedence(top(ops)) >= precedence(t):
                 x = pop(ops)
                 push(output, x)
             push(ops, t)
         elif is_lparen(t):
             push(ops, '(')
         elif is_rparen(t):
-            while not is_lparent(top(ops)):
+            while not is_lparen(top(ops)):
                 x = pop(ops)
                 push(output, x)
             pop(ops)
