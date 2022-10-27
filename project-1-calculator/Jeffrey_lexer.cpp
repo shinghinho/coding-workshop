@@ -1,3 +1,4 @@
+#https://ideone.com/7wmG2s
 #include <bits/stdc++.h>
 using namespace std;
 queue<string> q;
