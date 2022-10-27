@@ -51,13 +51,79 @@ def lex(s):
                 exit(-1) # Python function to exit the program early
     return ts
 
+def is_number(t):
+    return isinstance(t, int) 
+
+def is_operator(t):
+    return t in ['+','-','*','/']
+
+def push(s, x):
+    s.append(x)
+
+def pop(s):
+    x = s[-1]
+    del s[-1]
+    return x
+
+def top(s):
+    return s[-1]
+
+def is_lparen(t):
+    return t == '('
+
+def empty(s):
+    return len(s) == 0
+
+def is_rparen(t):
+    return t == ')'
+
+# Push, pop, top
+
+def precedence(t):
+    if t in ['+', '-']: return 1
+    elif t in ['*', '/']: return 2
+
 def parse(ts):
-    # TODO: Implement this using the shunting yard algorithm!
-    return []
+    ops = []
+    output = []
+    for t in ts:
+        if is_number(t):
+            push(output, t)
+        elif is_operator(t):
+            while not empty(ops) and \
+                    not is_lparen(t) and \
+                    precedence(top(ops)) >= precedence(t):
+                x = pop(ops)
+                push(output, x)
+            push(ops, t)
+        elif is_lparen(t):
+            push(ops, '(')
+        elif is_rparen(t):
+            while not is_lparent(top(ops)):
+                x = pop(ops)
+                push(output, x)
+            pop(ops)
+    while not empty(ops):
+        x = pop(ops)
+        push(output, x)
+    return output
+
+def run(t, a, b):
+    if t == '+':  return a+b
+    elif t == '-': return a-b
+    elif t == '*': return a*b
+    elif t == '/': return a/b
 
 def evaluate(ast):
-    # TODO: How should we evaluate reverse Polish notation?
-    return 27102022
+    s = []
+    for t in ast:
+        if isinstance(t, int):
+            s.append(t)
+        else: # + - * /
+            a, b = s[-2], s[-1]
+            del s[-2], s[-1]
+            s.append(run(t, a, b))
+    return s[0]
 
 # The main program:
 user_input = input('Input: ')
@@ -65,3 +131,4 @@ tokens = lex(user_input)
 ast = parse(tokens)
 result = evaluate(ast)
 print(result)
+
