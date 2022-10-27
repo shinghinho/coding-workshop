@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <vector>
+#include <stack>
+#include <queue>
+#include <string>
 
 using namespace std;
 
@@ -45,14 +48,96 @@ vector<string> lex(string s) {
     return ts;
 }
 
-vector<string> parse(vector<string> tokens) {
-    // TODO: Implement this using the shunting yard algorithm.
-    return vector<string>();
+bool is_num(string token) {
+    for (int i = 0; i < token.length(); i++) {
+        if (!isdigit(token.at(i))) return false;
+    }
+    return true;
 }
 
-int evaluate(vector<string> ast) {
-    // TODO: How should we evaluate reverse Polish notation?
-    return 27102022;
+bool is_operator(string token) {
+    return token == "+" || token == "-"
+        || token == "*" || token == "/";
+}
+
+bool is_lparen(string t) {
+    return t == "(";
+}
+
+bool is_rparen(string t) {
+    return t == ")";
+}
+
+int precedence(string op) {
+    if (op == "+" || op  == "-") {
+        return 1;
+    } else if (op == "*" || op == "/") {
+        return 2;
+    } else {
+        cout << "Impossible" << endl;
+        exit(-1);
+    }
+}
+
+queue<string> parse(vector<string> tokens) {
+    // TODO: Implement this using the shunting yard algorithm.
+    stack<string> ops = stack<string>();
+    queue<string> output = queue<string>();
+    for (int i = 0; i < tokens.size(); i++) {
+        string t = tokens.at(i);
+        if (is_num(t)) {
+            output.push(t);
+        } else if (is_operator(t)) {
+            while (!ops.empty() && !is_lparen(ops.top()) && precedence(ops.top()) >= precedence(t)) {
+                string e = ops.top();
+                ops.pop();
+                output.push(e);
+            }
+            ops.push(t);
+        } else if (is_lparen(t)) {
+            ops.push(t);
+        } else if (is_rparen(t)) {
+            while (!is_lparen(ops.top())) {
+                string e = ops.top();
+                ops.pop();
+                output.push(e);
+            }
+        }
+    }
+    while (!ops.empty()) {
+        string e = ops.top();
+        ops.pop();
+        output.push(e);
+    }
+    return output;
+}
+
+double apply(string op, double a, double b) {
+    if (op == "+") return a+b;
+    else if (op == "-") return a-b;
+    else if (op == "*") return a*b;
+    else if (op == "/") return a/b;
+    cout << "Impossible: unknown operator" << endl;
+    exit(-1);
+}
+
+double evaluate(queue<string> ast) {
+    stack<double> buffer = stack<double>();
+    while (!ast.empty()) {
+        string t = ast.front();
+        ast.pop();
+        if (is_num(t)) {
+            buffer.push(stod(t, nullptr));
+        } else if (is_operator(t)) {
+            double b = buffer.top();
+            buffer.pop();
+            double a = buffer.top();
+            buffer.pop();
+            double c = apply(t, a, b);
+            buffer.push(c);
+        }
+    }
+    return buffer.top();
 }
 
 int main() {
@@ -60,8 +145,8 @@ int main() {
     cout << "Input: ";
     getline(cin, user_input);
     vector<string> ts = lex(user_input);
-    vector<string> ast = parse(ts);
-    int result = evaluate(ast);
+    queue<string> ast = parse(ts);
+    double result = evaluate(ast);
     cout << result << endl;
     return 0;
 }

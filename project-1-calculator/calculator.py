@@ -51,13 +51,86 @@ def lex(s):
                 exit(-1) # Python function to exit the program early
     return ts
 
+# Stack operations
+def push(s, x):
+    s.append(x)
+
+def top(s):
+    return s[-1]
+
+def pop(s):
+    x = s[-1]
+    del s[-1]
+    return x
+
+def empty(s):
+    return len(s) == 0
+
+def is_num(t):
+    return isinstance(t, int)
+
+def is_operator(t):
+    return t in ['+', '-', '*', '/']
+
+def is_lparen(t):
+    return t == '('
+
+def is_rparen(t):
+    return t == ')'
+
+def precedence(op):
+    if op in ['+', '-']:
+        return 1
+    elif op in ['*', '/']:
+        return 2
+    print('Impossible')
+
 def parse(ts):
-    # TODO: Implement this using the shunting yard algorithm!
-    return []
+    ops = []
+    output = []
+    for t in ts:
+        if is_num(t):
+            push(output, t)
+        elif is_operator(t):
+            while not empty(ops) and \
+             not is_lparen(top(ops)) and \
+              precedence(top(ops)) >= precedence(t):
+                e = pop(ops)
+                push(output, e)
+            push(ops, t)
+        elif is_lparen(t):
+            push(ops, t)
+        elif is_rparen(t):
+            while top(ops) != '(':
+                e = pop(ops)
+                push(output, e)
+            pop(ops)
+    while not empty(ops):
+        e = pop(ops)
+        push(output, e)
+    return output
+
+def apply(op, a, b):
+    if op == '+':
+        return a+b
+    elif op == '-':
+        return a-b
+    elif op == '*':
+        return a*b
+    elif op == '/':
+        return a/b
+    return 'Error'
 
 def evaluate(ast):
-    # TODO: How should we evaluate reverse Polish notation?
-    return 27102022
+    s = []
+    for t in ast:
+        if is_num(t):
+            push(s, t)
+        elif is_operator(t):
+            b = pop(s)
+            a = pop(s)
+            push(s, apply(t, a, b))
+    return s[0]
 
 # The main program:
 user_input = input('Input: ')
