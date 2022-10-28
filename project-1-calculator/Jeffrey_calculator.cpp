@@ -4,7 +4,7 @@ using namespace std;
 queue<string> q;
 set<char>op;
 set<char>num;
-bool lex(string x){
+bool lex(string x){ 
     string t="";
     for(int i=0;i<x.length();i++){
         if(x[i]==' '){
