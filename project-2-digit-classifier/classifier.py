@@ -9,7 +9,7 @@ def draw(image):
 def learn(x, expected, predicted, m):
     pass
 
-# Task 2: flatten
+# Task 3: flatten
 # Input: a list of list of floats
 # Output: the concatenated list
 # Example:
@@ -18,7 +18,7 @@ def learn(x, expected, predicted, m):
 def flatten(xss):
     pass
 
-# Task 3: dot product
+# Task 4: dot product
 # Returns the dot product of two vectors of the same length
 # Example:
 #     Input: dot([3, 4, 5], [6, 7, 8])
@@ -27,7 +27,7 @@ def flatten(xss):
 def dot(m, x):
     pass
 
-# Task 4: 
+# Task 5: 
 # Returns a list of length n consisting random numbers from -1.0 to 1.0
 # Hint: use the `random' library
 # Example:
@@ -36,29 +36,29 @@ def dot(m, x):
 def new_classifier(n):
     pass
 
-# Task 5: prediction function
+# Task 6: prediction function
 # A classifier is a vector [m0, m1, ..., mn]
 # If the dot product of the classifier with the input >= 0, then 1.0 (true) else 0.0 (false)
 def run_classifier(m, x):
     pass
 
-# Task 6: building classifiers
+# Task 7: building classifiers
 # We initiate 10 classifiers, one for each digit.
 ms = [] # Implement this
 
-# Task 7:
+# Task 8:
 # Iterate from 0 to 9, if the ms[i]-th classifier returns
 # 1, then the predicted digit is i.
 # If none of them returned 1, then return an arbitrary digit (e.g. return 0).
 def predict(image):
     return 3
 
-# Task 8:
+# Task 9:
 # Train the variable `image' according to its corresponding digit
 def train(image, digit):
     pass
 
-# Task 9:
+# Task 10:
 # Train the entire dataset using the variables `data.images' and `data.digits'
 for i in range(1):
     pass
